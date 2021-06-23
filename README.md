@@ -5,6 +5,9 @@ A simple tool to convert JSON Array into table/tabular form to ease the data ana
 ![image](https://user-images.githubusercontent.com/22127564/123081996-30653f00-d43c-11eb-9f89-ebcbfbc1dd57.png)
 ![image](https://user-images.githubusercontent.com/22127564/123082062-42df7880-d43c-11eb-8af1-7cf1d0393ed6.png)
 
+# Demo
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/22127564/123082948-34459100-d43d-11eb-9e72-4fb02a6ff99a.gif)
+
 
 # Tech Stack
 1. Vanilla JS
