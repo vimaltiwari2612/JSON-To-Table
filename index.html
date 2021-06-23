@@ -1,0 +1,102 @@
+
+<style>
+#jsonArea{
+	width:100%;
+	height:100px;
+}
+
+#jsonURL {
+	width:100%;
+}
+table{
+	border-collapse : collapse;
+}
+</style>
+<h2>JSON To Table</h2>
+<textArea id="jsonArea" placeholder="Enter Valid JSON here..."></textArea>
+<input type="text" id="jsonURL" placeholder="Enter Valid JSON URL here..." hidden="true"/>
+<br/>
+<button onclick="parse()">
+Create Table
+</button>
+<br/>
+<br/>
+<table id="jsonTable" style="border : 1px"/>
+<script>
+
+function parse(){
+	var jsonArea = document.getElementById('jsonArea').value;
+	var jsonURL = document.getElementById('jsonURL').value;
+	var table = document.getElementById('jsonTable');
+	table.innerHTML = "";
+	
+	if((jsonArea != undefined && jsonArea != null && jsonArea.trim() != "") && (jsonURL != undefined && jsonURL != null && jsonURL.trim() != "")){
+		alert('Please provide either JSON OR URL as input.');
+	}
+	else if(jsonArea != undefined && jsonArea != null && jsonArea.trim() != ""){
+		formTable(jsonArea);
+	}
+	else if(jsonURL != undefined && jsonURL != null && jsonURL.trim() != ""){
+		fetch(jsonURL)
+		.then(json => {
+			formTable(json);
+		}).catch(error=>{
+			alert('Error while fetch from URL : '+error);
+		});
+	}else{
+		alert('Please provide either JSON OR URL as input.');
+	}
+}
+
+function isValidJson(json){
+  console.log(json);
+	return true;
+}
+
+function formTable(json){
+	if(!isValidJson(json)){
+		alert('No Valid Json found.');
+		return;
+	}
+	var table = document.getElementById('jsonTable');
+	var jsonStr = JSON.parse(json);
+	var setHeaders = true;
+	for(i in jsonStr){
+		var item = JSON.stringify(jsonStr[i]);
+	  if(setHeaders){
+			createEntry(table, item, true);
+			setHeaders = false;
+		}
+		createEntry(table,item, false);
+	}
+	
+	formatTable(table);
+}
+
+
+function createEntry(table,item,isHeader){
+		var tr = document.createElement("tr");
+		var json = JSON.parse(item);
+		for(i in json){
+		console.log(i);
+			var td = document.createElement("td");
+			if(isHeader){
+				var bold = document.createElement('b');
+				var textnode = document.createTextNode(i);       
+				bold.appendChild(textnode);
+				td.appendChild(bold);
+			}else{
+				var textnode = document.createTextNode(json[i]);    
+				td.appendChild(textnode);
+			}
+			formatTable(td);
+			tr.appendChild(td);
+		}
+		table.appendChild(tr);
+}
+
+function formatTable(item){
+	item.style.border = '1px Solid black';
+}
+</script>
+
