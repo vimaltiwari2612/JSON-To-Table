@@ -19,6 +19,9 @@ table{
 <button onclick="parse()">
 Create Table
 </button>
+<button id="download" hidden="true">
+Download
+</button>
 <br/>
 <br/>
 <table id="jsonTable" style="border : 1px"/>
@@ -28,6 +31,8 @@ function parse(){
 	var jsonArea = document.getElementById('jsonArea').value;
 	var jsonURL = document.getElementById('jsonURL').value;
 	var table = document.getElementById('jsonTable');
+	var download = document.getElementById("download");
+	download.hidden= true;
 	table.innerHTML = "";
 	
 	if((jsonArea != undefined && jsonArea != null && jsonArea.trim() != "") && (jsonURL != undefined && jsonURL != null && jsonURL.trim() != "")){
@@ -71,6 +76,8 @@ function formTable(json){
 	}
 	
 	formatTable(table);
+	var download = document.getElementById("download");
+	download.hidden= false;
 }
 
 
@@ -98,5 +105,54 @@ function createEntry(table,item,isHeader){
 function formatTable(item){
 	item.style.border = '1px Solid black';
 }
+
+function download_csv(csv, filename) {
+    var csvFile;
+    var downloadLink;
+
+    // CSV FILE
+    csvFile = new Blob([csv], {type: "text/csv"});
+
+    // Download link
+    downloadLink = document.createElement("a");
+
+    // File name
+    downloadLink.download = filename;
+
+    // We have to create a link to the file
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+
+    // Make sure that the link is not displayed
+    downloadLink.style.display = "none";
+
+    // Add the link to your DOM
+    document.body.appendChild(downloadLink);
+
+    // Lanzamos
+    downloadLink.click();
+}
+
+function export_table_to_csv(html, filename) {
+	var csv = [];
+	var rows = document.querySelectorAll("table tr");
+	
+    for (var i = 0; i < rows.length; i++) {
+		var row = [], cols = rows[i].querySelectorAll("td, th");
+		
+        for (var j = 0; j < cols.length; j++) 
+            row.push(cols[j].innerText);
+        
+		csv.push(row.join(","));		
+	}
+
+    // Download CSV
+    download_csv(csv.join("\n"), filename);
+}
+
+document.getElementById("download").addEventListener("click", function () {
+    var html = document.querySelector("table").outerHTML;
+	export_table_to_csv(html, "table.csv");
+});
+
 </script>
 
